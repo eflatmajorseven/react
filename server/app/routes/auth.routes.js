@@ -10,6 +10,11 @@ module.exports = function(app) {
     );
     next();
   });
+app.get(
+  "/api/auth/users",
+  //[authJwt.verifyToken, authJwt.isAdmin],
+  controller.getAllUsers
+);
 
   app.post(
     "/api/auth/signup",

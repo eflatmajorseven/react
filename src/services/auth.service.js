@@ -43,6 +43,17 @@ const createSlotUser = (shiftstart,shiftend) => {
   })
 };
 
+const getUsers = () => {
+  axios.get('http://localhost:8080/api/auth/users')
+  .then((response)=> {
+        console.log('users recieved')
+        return response.data;
+  })
+  .catch(() => {
+    console.log('error retrieving users')
+  })
+};
+
 const logout = () => {
   localStorage.removeItem("user");
 };
@@ -56,4 +67,5 @@ export default {
   login,
   logout,
   getCurrentUser,
+  getUsers
 };

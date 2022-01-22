@@ -10,6 +10,8 @@ module.exports = function(app) {
     next();
   });
 
+
+
   app.get("/api/test/all", controller.allAccess);
 
   app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);

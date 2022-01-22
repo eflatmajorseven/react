@@ -110,6 +110,17 @@ exports.signin = (req, res) => {
     });
 };
 
+exports.getAllUsers = (req,res) => {
+  User.find({}, function(err, users) {
+    var userMap = {};
+
+    users.forEach(function(user){
+      userMap[user._id] = user;
+    });
+    res.send(userMap)
+  })
+};
+
 exports.slotadmin = (req,res) => {
-  
+
 };
