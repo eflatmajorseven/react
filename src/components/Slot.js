@@ -36,21 +36,12 @@ const OVERLAY_STYLES = {
        
 
            useEffect(() => {
-                getUsers();
+               AuthService.getUsers().then((data) => {
+               setUsers(data);
+               })
+              
             }, []);
-            //sitas veikia
-         const getUsers = () => {
-                axios.get('http://localhost:8080/api/auth/users')
-                .then((response) => {
-                    const data = response.data;
-                    setUsers(data);
-                    console.log("users recieved")
-                    
-                })
-                .catch(()=> {
-                    console.log("failed to retrieve users")
-                });
-            }
+          
             const populateOptions = (users) => {
                 if (!users.length) return null;
 

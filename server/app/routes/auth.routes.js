@@ -17,7 +17,15 @@ module.exports = function(app) {
     "/api/auth/slot", 
     controller.slotadmin
   );
-  
+    app.post(
+    "/api/auth/saveslot", 
+    controller.saveSlot
+  );
+ app.get(
+   "/api/auth/slots",
+   controller.getAllSlots
+ );
+
 app.get(
   "/api/auth/users",
   //[authJwt.verifyToken, authJwt.isAdmin],

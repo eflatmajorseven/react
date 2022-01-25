@@ -78,15 +78,7 @@ const App = () => {
               </Link>
             </li>
           )}
-          {showAdminBoard && (
-            <li className="nav-item">
-              <Link to={"/slot"} className="nav-link">
-                Slots
-              </Link>
-            </li>
-          )}
-
-
+          
           {currentUser && (
 
             <li className="nav-item">

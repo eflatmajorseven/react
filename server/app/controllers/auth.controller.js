@@ -26,6 +26,26 @@ slot.save((err) => {
 })
 };
 
+exports.saveSlot = (req,res) => {
+  console.log("saveslot api:" + req.body.id)
+  Slot.findByIdAndUpdate(req.body.id, {
+    startShift: req.body.startShift,
+    endShift: req.body.endShift
+  })
+  .then(user => {
+    if (!user){
+      return res.status(404).send({
+        message: "slot not found by id" + req.body.id
+      })
+    }
+    res.send(user)
+  })
+  .catch(err => {
+    return res.status(500).send({
+      message: "error updating slot by id" + req.body.id
+    })
+  }) 
+}
 
 exports.signup = (req, res) => {
   const user = new User({
@@ -143,6 +163,7 @@ exports.signin = (req, res) => {
     });
 };
 
+
 exports.getAllUsers = (req,res) => {
   User.find({  })
         .then((data) => {
@@ -152,5 +173,16 @@ exports.getAllUsers = (req,res) => {
         .catch((error) => {
             console.log('error: ', error);
         });
+};
+
+exports.getAllSlots = (req,res) => {
+  Slot.find({ })
+        .then((data)=> {
+          //console.log(data);
+          res.json(data);
+          })
+        .catch((error)=>{
+          console.log('error: ', error);
+        })
 };
 

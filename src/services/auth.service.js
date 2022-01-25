@@ -13,14 +13,15 @@ const register = (username,name,lastname, email, password) => {
 };
 
 const getUsers = () => {
-  axios.get('http://localhost:8080/api/auth/users')
+  return (axios.get(API_URL + "users")
   .then((response)=> {
-        console.log('users recieved')
-        return response.data;
+    console.log('users recieved')
+        return response.data  
   })
-  .catch(() => {
-    console.log('error retrieving users')
+  .catch(()=>{
+    console.log("error retrieving users")
   })
+  )
 };
 
 const login = (username, password) => {
@@ -60,6 +61,15 @@ const createSlotAdmin = (name,lastname,date) => {
         return response.data;
   });
 };
+const saveSlot = (id,startShift,endShift) => {
+  //alert(name);
+  return axios.
+  post(API_URL + "saveslot", {
+    id,
+    startShift,
+    endShift
+  })
+};
 
 const createSlotUser = (shiftstart,shiftend) => {
   return axios.
@@ -86,4 +96,6 @@ export default {
   getCurrentUser,
   getUsers,
   createSlotAdmin,
+  getSlots,
+  saveSlot,
 };

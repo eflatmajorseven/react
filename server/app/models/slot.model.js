@@ -7,7 +7,7 @@ const Slot = mongoose.model(
     lastname: String,
     date: Date,
     startShift: Date,
-    endshift: Date,
+    endShift: Date,
     shiftTime: Number
   })
 );
