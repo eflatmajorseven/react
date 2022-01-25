@@ -2,9 +2,30 @@ const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
 const Role = db.role;
+const Slot = require("../models/slot.model");
+
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+const { getNodeText } = require("@testing-library/react");
+
+exports.slotadmin = (req,res) => {
+  console.log("slotas: " + req.body.name)
+  //res.send({message: req.body.name + req.body.lastname})
+const slot = new Slot({
+  name: req.body.name,
+  lastname: req.body.lastname,
+  date: req.body.date
+})
+slot.save((err) => {
+  if (err) {
+    res.status(500).send({ message: err });
+    return;
+  }
+  res.send({message: "padarem slota"})
+})
+};
+
 
 exports.signup = (req, res) => {
   const user = new User({
@@ -63,8 +84,20 @@ exports.signup = (req, res) => {
     }
   });
 };
-
+exports.removeUser = (req,res) => {
+  User.findByIdAndDelete(req.params.id)
+  .exec()
+  .then(doc => {
+    if (!doc) {return res.status(404).end();}
+    return res.status(204).end;
+  })
+  .catch((error) => {
+    console.log('error removing user: ', error);
+});
+  
+}
 exports.signin = (req, res) => {
+
   User.findOne({
     username: req.body.username
   })
@@ -111,16 +144,13 @@ exports.signin = (req, res) => {
 };
 
 exports.getAllUsers = (req,res) => {
-  User.find({}, function(err, users) {
-    var userMap = {};
-
-    users.forEach(function(user){
-      userMap[user._id] = user;
-    });
-    res.send(userMap)
-  })
+  User.find({  })
+        .then((data) => {
+            //console.log('Data: ', data);
+            res.json(data);
+        })
+        .catch((error) => {
+            console.log('error: ', error);
+        });
 };
 
-exports.slotadmin = (req,res) => {
-
-};

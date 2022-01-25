@@ -1,4 +1,5 @@
 \react npm install
 \react npm i --save react-select
 \react npm install --save @fullcalendar/react @fullcalendar/daygrid @fullcalendar/interaction
+\react npm install react-chartjs-2@3.0.4
 \react\server\ npm install

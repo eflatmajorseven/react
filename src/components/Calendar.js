@@ -1,31 +1,49 @@
-import React from 'react'
+import React, {useState} from 'react'
+
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
+import Popup from './Popup'
+import Slot from './Slot'
 
-export default class DemoApp extends React.Component {
- 
-  
-  render() {
+const CALENDAR_STYLES = {
+  position: 'relative',
+  zIndex:1
+}
+ export default function Calendar () {
+  const [isOpen, setIsOpen] = useState(false)
+  const [date, setDate] = useState("");
+
+  const handleDateClick = (arg) => { 
+    setIsOpen(true);
+    setDate(arg.dateStr);
+    //alert(arg.dateStr);
+  }
     return (
+    <div>
+      <div className='calendar' style={CALENDAR_STYLES}>
       <FullCalendar
         
         plugins={[ dayGridPlugin, interactionPlugin ]}
-        dateClick={this.handleDateClick}
+        dateClick={handleDateClick}
         eventContent={renderEventContent}
         events={[
-    { title: `}`, date: '2022-01-21' },
-    { title: 'event 2', date: '2022-01-22' }
+    { title: `Jonas A. 18h`, date: '2022-01-21' },
+    {title: `Jonas A. 18h`, date: '2022-01-21' },
+    { title: 'Petras B. 16h', date: '2022-01-22' }
   ]}
       />
+      </div>
+      <Slot open={isOpen} onClose={()=> setIsOpen(false)}
+      date={date}>         
+      </Slot>
+
+      </div>
     )
-  }
-
-  handleDateClick = (arg) => { 
-    alert(arg.dateStr)
-  }
-
 }
+
+
+
 function renderEventContent(eventInfo) {
   return (
     <>

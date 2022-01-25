@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import ReactDom from 'react-dom'
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
@@ -7,74 +8,98 @@ import AuthService from "../services/auth.service";
 import UserService from "../services/user.service";
 import axios from 'axios';
 
+const MODAL_STYLES = {
+  position: 'fixed',
+  top: '50%',
+  left: '50%',
+  width: '50%',
+  transform: 'translate(-50%, -50%)',
+  backgroundColor: '#FFF',
+  padding: '50px',
+  zIndex: 1000
+}
 
-const options = [
-            { value: 'chocolate', label: 'Chocolate' },
-            { value: 'strawberry', label: 'Strawberry' },
-            { value: 'vanilla', label: 'Vanilla' }
-          ];
+const OVERLAY_STYLES = {
+  position: 'fixed',
+  top:0,
+  left:0,
+  right:0,
+  bottom:0,
+  backgroundColor: 'rgba(0,0,0, .7)'
+}
 
          
-     export default  class Slot extends React.Component {
-            state = {
-              selectedOption: null,
-              users: [],
-            };
-            componentDidMount = () => {
-                this.populateOptions();
-            };
+     export default  function Slot ({open, children, onClose, date}) {
+
+       const [selectedOption, setSelectedOption] = useState(null);
+       const [users, setUsers] = useState('');
+       
+
+           useEffect(() => {
+                getUsers();
+            }, []);
             //sitas veikia
-            // populateOptions = () => {
-            //     axios.get('http://localhost:8080/api/auth/users')
-            //     .then((response) => {
-            //         const data = response.data;
-            //         this.setState({ users: data});
-            //         console.log("users recieved")
-            //     })
-            //     .catch(()=> {
-            //         console.log("failed to retrieve users")
-            //     });
-            // }
-            populateOptions = () => {
-                const gotusers = AuthService.getUsers;
-                this.setState({users: gotusers})
-                console.log(gotusers);
+         const getUsers = () => {
+                axios.get('http://localhost:8080/api/auth/users')
+                .then((response) => {
+                    const data = response.data;
+                    setUsers(data);
+                    console.log("users recieved")
+                    
+                })
+                .catch(()=> {
+                    console.log("failed to retrieve users")
+                });
+            }
+            const populateOptions = (users) => {
+                if (!users.length) return null;
+
+              return users.map((user) => ( 
+                  { value: user, label: user.name+" "+user.lastname} 
+                ));
+                    
             };
 
-            handleSelectChange = (selectedOption) => {
-              this.setState({ selectedOption }
-              );
-              console.log(UserService.getPublicContent);
+
+            const handleSelectChange = (selectedOption) => {
+              setSelectedOption(selectedOption)
+              console.log(selectedOption)
             };
-            handleSubmit =(e)=> {
+            const handleSubmit =(e)=> {
                 e.preventDefault();
-                alert('submit');
+                //alert(selectedOption.value.name)
+                AuthService.createSlotAdmin(selectedOption.value.name,selectedOption.value.lastname,date)
+                
             }
-            
-            
-            render() {
-              const { selectedOption } = this.state;
-          
-              return (
+            if (!open) return null;
+              return ReactDom.createPortal(
+                <>
+                <div style={OVERLAY_STYLES}/>
+                <div style={MODAL_STYLES} className='popup'>
+  <button onClick={onClose}>Close</button>
+        {children} 
                   <div>
-                  <Form onSubmit={this.handleSubmit} > 
+                  <h4>Data: {date}</h4>
+                  <Form onSubmit={handleSubmit} > 
                   
                 <Select
                   value={selectedOption}
-                  onChange={this.handleSelectChange}
-                  options={options}
+                  onChange={handleSelectChange}
+                  options={populateOptions(users)}
                 />
                 <div className="form-group">
                 <button className="btn btn-primary btn-block">Confirm</button>
               </div>
                 <CheckButton style={{ display: "none" }} />
                 </Form>
-                <h2></h2>
                 </div>
                 
+                </div>
+                </>,
+  document.getElementById('portal')
               );
             }
-          }
+
 
 
 

@@ -12,6 +12,17 @@ const register = (username,name,lastname, email, password) => {
   });
 };
 
+const getUsers = () => {
+  axios.get('http://localhost:8080/api/auth/users')
+  .then((response)=> {
+        console.log('users recieved')
+        return response.data;
+  })
+  .catch(() => {
+    console.log('error retrieving users')
+  })
+};
+
 const login = (username, password) => {
   return axios
     .post(API_URL + "signin", {
@@ -27,12 +38,27 @@ const login = (username, password) => {
     });
 };
 
-const createSlotAdmin = (name,lastname) => {
+const getSlots = () => {
   return axios.
-  post(API_URL + "slotadmin", {
-    name,
-    lastname
+  get(API_URL + "slots")
+  .then((response) => {
+    return response.data;
   })
+  .catch(() => {
+    console.log("error retrieving slots")
+  })
+}
+
+const createSlotAdmin = (name,lastname,date) => {
+  //alert(name);
+  return axios.
+  post(API_URL + "slot", {
+    name,
+    lastname,
+    date
+  }).then((response) => {
+        return response.data;
+  });
 };
 
 const createSlotUser = (shiftstart,shiftend) => {
@@ -43,16 +69,7 @@ const createSlotUser = (shiftstart,shiftend) => {
   })
 };
 
-const getUsers = () => {
-  axios.get('http://localhost:8080/api/auth/users')
-  .then((response)=> {
-        console.log('users recieved')
-        return response.data;
-  })
-  .catch(() => {
-    console.log('error retrieving users')
-  })
-};
+
 
 const logout = () => {
   localStorage.removeItem("user");
@@ -67,5 +84,6 @@ export default {
   login,
   logout,
   getCurrentUser,
-  getUsers
+  getUsers,
+  createSlotAdmin,
 };

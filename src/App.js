@@ -14,6 +14,8 @@ import BoardModerator from "./components/BoardModerator";
 import BoardAdmin from "./components/BoardAdmin";
 import Calendar from "./components/Calendar";
 import Slot from "./components/Slot";
+import Chart from "./components/Chart";
+import UserDelete from "./components/UserDelete"
 
  import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
@@ -76,15 +78,42 @@ const App = () => {
               </Link>
             </li>
           )}
+          {showAdminBoard && (
+            <li className="nav-item">
+              <Link to={"/slot"} className="nav-link">
+                Slots
+              </Link>
+            </li>
+          )}
+
 
           {currentUser && (
+
             <li className="nav-item">
               <Link to={"/user"} className="nav-link">
                 User
               </Link>
-            </li>
+              </li>
+              
+          )}
+          {currentUser && (
+
+         <li className="nav-item">
+               <Link to={"/calendar"} className="nav-link">
+               Calendar
+             </Link>
+              </li>  
+          )}
+          {currentUser && (
+
+         <li className="nav-item">
+               <Link to={"/chart"} className="nav-link">
+               Chart
+             </Link>
+              </li>  
           )}
         </div>
+        
 
         {currentUser ? (
           <div className="navbar-nav ml-auto">
@@ -127,6 +156,8 @@ const App = () => {
           <Route path="/admin" component={BoardAdmin} />
           <Route path="/calendar" component={Calendar}/>
           <Route path="/slot" component={Slot}/>
+          <Route path="/chart" component={Chart}/>
+          <Route path="/userdelete" component={UserDelete}/>
         </Switch>
       </div>
 
